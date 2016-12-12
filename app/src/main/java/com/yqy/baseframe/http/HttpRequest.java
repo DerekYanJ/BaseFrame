@@ -4,6 +4,9 @@ package com.yqy.baseframe.http;
 import com.yqy.baseframe.BuildConfig;
 import com.yqy.baseframe.bean.Result;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -109,7 +112,15 @@ public class HttpRequest {
         public T call(Result<T> result) {
             if (result.ret != 200) {
                 //主动抛异常  会自动进去OnError方法
-                throw new ApiException(result.ret, result.msg);
+                try {
+                    JSONObject errorJson = new JSONObject();
+                    errorJson.put("errorCode",result.ret+"");
+                    errorJson.put("errorMsg",result.msg);
+                    throw new ApiException(errorJson.toString());
+                } catch (JSONException e) {
+//                    e.printStackTrace();
+                    throw new ApiException("加载失败");
+                }
             }
             return result.data;
         }

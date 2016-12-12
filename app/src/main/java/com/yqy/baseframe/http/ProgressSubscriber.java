@@ -1,9 +1,11 @@
 package com.yqy.baseframe.http;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.yqy.baseframe.frame.AbstractActivity;
+import com.yqy.baseframe.utils.JsonUtil;
+
+import java.util.Map;
 
 import rx.Subscriber;
 
@@ -102,10 +104,14 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
     public void onError(Throwable e) {
         if(isShowDialog)
             dismissProgressDialog();
-//        if (mSubscriberResultListener != null)
-//            mSubscriberResultListener.onError("errorCode","msg");
-        ((AbstractActivity)mContext).showSnackbar(e.getMessage());
-        Log.e("error",e.getMessage());
+        if(e.getMessage().indexOf("errorCode") != -1){
+            Map<String,String> errorMap = JsonUtil.jsonToMap1(e.getMessage());
+            if (mSubscriberResultListener != null)
+                mSubscriberResultListener.onError(Integer.parseInt(errorMap.get("errorCode")),errorMap.get("errorMsg"));
+            ((AbstractActivity)mContext).showSnackbar(errorMap.get("errorCode") + "：" + errorMap.get("errorMsg"));
+        }else
+            ((AbstractActivity)mContext).showSnackbar(e.getMessage());
+//        Log.e("error",e.getMessage());
     }
 
     /**

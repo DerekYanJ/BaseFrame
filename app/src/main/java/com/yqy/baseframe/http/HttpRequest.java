@@ -131,11 +131,10 @@ public class HttpRequest {
      * @param subscriber
      * @param params
      */
+
     public void getResult(Subscriber<Object> subscriber, Map<String, String> params) {
         toSubscribe(mHttpService.getResult(params).map(new ResultFunc<Object>()), subscriber);
     }
-
-
 
     /**
      * 上传文件

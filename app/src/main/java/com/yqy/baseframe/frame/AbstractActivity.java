@@ -145,17 +145,9 @@ public abstract class AbstractActivity extends AppCompatActivity  implements Vie
                 mOnClickBackListener.onClickBackLister();
                 return true;
             }
-            finishThisActivity();
+            finish();
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    /**
-     * 结束activity
-     */
-    public void finishThisActivity(){
-        //TODO something
-        finish();
     }
 
     public OnClickBackListener mOnClickBackListener;

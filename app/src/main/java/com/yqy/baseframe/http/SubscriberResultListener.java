@@ -19,5 +19,5 @@ public interface SubscriberResultListener<T> {
      * @param errorCode
      * @param msg
      */
-    void onError(int errorCode,String msg);
+    void onError(int errorCode, String msg,int requestId);
 }

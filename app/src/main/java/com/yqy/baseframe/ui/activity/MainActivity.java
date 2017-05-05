@@ -1,4 +1,4 @@
-package com.yqy.baseframe.view.activity;
+package com.yqy.baseframe.ui.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

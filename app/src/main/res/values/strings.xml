@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">BaseFrame</string>
-    <string name="progress_dialog_str1">加载中...</string>
+    <string name="str_progress_msg_load">加载中...</string>
 </resources>

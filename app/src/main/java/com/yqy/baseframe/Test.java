@@ -41,7 +41,6 @@ public class Test extends ToolbarActivity{
     @Override
     protected void initData() {
         //TODO SOMETHING
-        showProgressDialog("");
         req();
     }
 

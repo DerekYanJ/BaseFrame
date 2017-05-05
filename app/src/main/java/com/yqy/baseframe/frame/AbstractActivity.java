@@ -2,11 +2,17 @@ package com.yqy.baseframe.frame;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.IBinder;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,7 +20,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yqy.baseframe.R;
+import com.yqy.baseframe.http.SubscriberResultListener;
+import com.yqy.baseframe.listener.OnAlertDialogListener;
 import com.yqy.baseframe.utils.glide.GlideCircleTransform;
+
+import java.util.Map;
 
 import butterknife.Unbinder;
 
@@ -24,10 +34,13 @@ import butterknife.Unbinder;
  * @date 2016/12/6
  */
 
-public abstract class AbstractActivity extends AppCompatActivity  implements View.OnClickListener{
+public abstract class AbstractActivity extends AppCompatActivity implements View.OnClickListener,SubscriberResultListener {
     private ProgressDialog mProgressDialog;
+    private AlertDialog.Builder mAlertDialog;
     public Unbinder unbinder; //butterKnife 对象
     public Context mContext;
+    public int pageNum = 10; //每页显示条目数量
+    public boolean isLoadMore = true;//是否可以加载更多
 
 
     /** 预备布局contenView id */
@@ -44,6 +57,103 @@ public abstract class AbstractActivity extends AppCompatActivity  implements Vie
 
     /** 返回键(标题栏、虚拟键) 点击事件*/
     protected abstract OnClickBackListener getOnBackClickListener();
+
+    /**
+     * 设置刷新状态
+     * @param mSwipeRefreshLayout
+     * @param flag
+     */
+    public void setRefreshing(final SwipeRefreshLayout mSwipeRefreshLayout, final boolean flag){
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(flag);
+            }
+        });
+    }
+
+    /**
+     * 处理返回数据
+     * @param data
+     * @param id
+     * @param <T>
+     */
+    public <T> void doData(T data, int id){}
+    public <T> void doData(T data, int id, String qid){}
+
+    @Override
+    public void onNext(Object o, int requestId) {
+        doData(o,requestId);
+    }
+
+    /**
+     * 处理错误信息
+     * @param errorCode
+     * @param msg
+     */
+    @Override
+    public void onError(int errorCode, String msg,int requestId) {
+        //这里可以根据errorCode或者msg做一些全局的处理
+        showToast(msg);
+    }
+
+    /**
+     * 不带progress的请求
+     * @param params
+     */
+    public void reqNoProgress(Map<String,String> params){
+        /*HttpRequest.getInstance().getResult(new Subscriber<JSONObject>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(JSONObject o) {
+
+            }
+        },params);*/
+    }
+
+    /**
+     * 说明：隐藏软键盘
+     *
+     * @param editText
+     *            当前输入框
+     * @author liuwei
+     * @version 1.0
+     * @since 2014-10-16 下午07:35:33
+     */
+    public void hideSoftInput(final EditText editText) {
+        try {
+            hideSoftInput(editText.getWindowToken());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 说明：隐藏软键盘
+     *
+     * @param binder
+     *            当前窗口所对应的IBinder对象
+     * @author liuwei
+     * @version 1.0
+     * @since 2014-10-16 下午07:35:33
+     */
+    public void hideSoftInput(final IBinder binder) {
+        try {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(binder, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 加载网络图片并显示到ImageView  (圆形)
@@ -89,7 +199,37 @@ public abstract class AbstractActivity extends AppCompatActivity  implements Vie
     }
 
     /**
-     * 显示加载动画
+     * 展示对话弹框
+     * @param messageStr
+     * @param cancelStr
+     * @param rightStr
+     * @param listener
+     */
+    public void showAlertDialog(String messageStr, String cancelStr, String rightStr,
+                                final OnAlertDialogListener listener){
+        if(mAlertDialog == null){
+            mAlertDialog = new AlertDialog.Builder(this);
+        }
+        mAlertDialog.setMessage(messageStr)
+                .setNegativeButton(cancelStr, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        listener.onNegative();
+                    }
+                })
+                .setPositiveButton(rightStr, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        listener.onPositive();
+                    }
+                });
+        mAlertDialog.show();
+    }
+
+    /**
+     * 显示加载弹窗
      *
      * @param message
      */
@@ -100,7 +240,7 @@ public abstract class AbstractActivity extends AppCompatActivity  implements Vie
             mProgressDialog.setCancelable(true);
         }
         if(TextUtils.isEmpty(message))
-            mProgressDialog.setMessage(getString(R.string.progress_dialog_str1));
+            mProgressDialog.setMessage(getString(R.string.str_progress_msg_load));
         else
             mProgressDialog.setMessage(message);
         if(!mProgressDialog.isShowing()){
@@ -142,7 +282,7 @@ public abstract class AbstractActivity extends AppCompatActivity  implements Vie
             mOnClickBackListener = getOnBackClickListener();
             if(mOnClickBackListener != null){
                 //触发我们自己的返回键监听事件
-                mOnClickBackListener.onClickBackLister();
+                mOnClickBackListener.onClickBack();
                 return true;
             }
             finish();
@@ -152,21 +292,12 @@ public abstract class AbstractActivity extends AppCompatActivity  implements Vie
 
     public OnClickBackListener mOnClickBackListener;
     public interface OnClickBackListener{
-        void onClickBackLister();
+        void onClickBack();
     }
 
     public void setOnClickBackListener(OnClickBackListener mOnClickBackListener){
         this.mOnClickBackListener = mOnClickBackListener;
     }
-
-    /**
-     * 处理返回数据
-     * @param data
-     * @param id
-     * @param <T>
-     */
-    public <T> void doData(T data, int id){}
-    public <T> void doData(T data, int id, String qid){}
 
     /*
 	 * 倒计时 秒数
@@ -178,7 +309,7 @@ public abstract class AbstractActivity extends AppCompatActivity  implements Vie
      * @param tv
      * @param sendMsmCount 秒数
      */
-    public void showTimeDown(final TextView tv, int sendMsmCount) {
+    public void startTimeDown(final TextView tv, int sendMsmCount) {
         tv.setEnabled(false);
         tv.setTag(sendMsmCount);
         tv.postDelayed(new Runnable() {

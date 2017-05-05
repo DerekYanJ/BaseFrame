@@ -5,7 +5,6 @@ import android.view.View;
 import com.yqy.baseframe.frame.ToolbarActivity;
 import com.yqy.baseframe.http.HttpRequest;
 import com.yqy.baseframe.http.ProgressSubscriber;
-import com.yqy.baseframe.http.SubscriberResultListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,19 +62,7 @@ public class Test extends ToolbarActivity{
     private void req(){
         Map<String,String> params = new HashMap<>();
         params.put("service","");
-        //带progress
-        HttpRequest.getInstance().getResult(new ProgressSubscriber<Object>(new SubscriberResultListener() {
-            @Override
-            public void onNext(Object o, int requestId) {
-                doData(o,requestId);
-//                doData(o,requestId,"");
-            }
-
-            @Override
-            public void onError(int errorCode, String msg) {
-
-            }
-        },this,0),params);
+        HttpRequest.getInstance().getResult(new ProgressSubscriber<Object>(this,this,0),params);
 
         //不带progress
         HttpRequest.getInstance().getResult(new Subscriber<Object>() {

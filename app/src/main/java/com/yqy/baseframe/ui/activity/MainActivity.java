@@ -1,15 +1,40 @@
 package com.yqy.baseframe.ui.activity;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.View;
 
 import com.yqy.baseframe.R;
+import com.yqy.baseframe.frame.ToolbarActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ToolbarActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int preView() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initView() {
+        setToolBarCenterTitle("我是首页");
+
+    }
+
+    @Override
+    protected void addListener() {
+
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected OnClickBackListener getOnBackClickListener() {
+        return null;
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 }

@@ -55,7 +55,7 @@ public abstract class ToolbarActivity  extends AbstractActivity implements View.
             @Override
             public void onClick(View v) {
                 if (mOnClickBackListener != null) {
-                    mOnClickBackListener.onClickBackLister();
+                    mOnClickBackListener.onClickBack();
                 } else {
                     finish();
                 }

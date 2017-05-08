@@ -6,6 +6,6 @@ package com.yqy.baseframe.listener;
  */
 
 public interface OnRecyclerViewListener {
-    void onItemClickListener(int position);
-    void onItemLongClickListener(int position);
+    void onItemClick(int position);
+    void onItemLongClick(int position);
 }

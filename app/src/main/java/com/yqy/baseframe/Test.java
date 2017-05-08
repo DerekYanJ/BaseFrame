@@ -2,7 +2,7 @@ package com.yqy.baseframe;
 
 import android.view.View;
 
-import com.yqy.baseframe.frame.ToolbarActivity;
+import com.yqy.baseframe.frame.BaseActivity;
 import com.yqy.baseframe.http.HttpRequest;
 import com.yqy.baseframe.http.ProgressSubscriber;
 
@@ -17,7 +17,7 @@ import rx.Subscriber;
  * @date 2016/12/6
  */
 
-public class Test extends ToolbarActivity{
+public class Test extends BaseActivity {
 
 
     @Override

@@ -3,9 +3,9 @@ package com.yqy.baseframe.ui.activity;
 import android.view.View;
 
 import com.yqy.baseframe.R;
-import com.yqy.baseframe.frame.ToolbarActivity;
+import com.yqy.baseframe.frame.BaseActivity;
 
-public class MainActivity extends ToolbarActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected int preView() {

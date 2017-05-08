@@ -10,9 +10,9 @@ public interface OnAlertDialogListener {
     /**
      * 右侧按钮
      */
-    void onPositive();
+    void onPositiveClick();
     /**
      * 左侧按钮
      */
-    void onNegative();
+    void onNegativeClick();
 }

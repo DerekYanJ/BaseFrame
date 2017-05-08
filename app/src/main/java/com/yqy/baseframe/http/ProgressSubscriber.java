@@ -1,7 +1,9 @@
 package com.yqy.baseframe.http;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.yqy.baseframe.BuildConfig;
 import com.yqy.baseframe.frame.AbstractActivity;
 import com.yqy.baseframe.utils.JsonUtil;
 
@@ -107,11 +109,11 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
         if(e.getMessage().indexOf("errorCode") != -1){
             Map<String,String> errorMap = JsonUtil.jsonToMap1(e.getMessage());
             if (mSubscriberResultListener != null)
-                mSubscriberResultListener.onError(Integer.parseInt(errorMap.get("errorCode")),errorMap.get("errorMsg"));
+                mSubscriberResultListener.onError(Integer.parseInt(errorMap.get("errorCode")),errorMap.get("errorMsg"),requestId);
             ((AbstractActivity)mContext).showSnackbar(errorMap.get("errorCode") + "：" + errorMap.get("errorMsg"));
         }else
             ((AbstractActivity)mContext).showSnackbar(e.getMessage());
-//        Log.e("error",e.getMessage());
+        if(BuildConfig.DEBUG) Log.e("error",e.getMessage());
     }
 
     /**

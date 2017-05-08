@@ -191,7 +191,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     }
 
     /**
-     * Toast 吐丝
+     * Toast
      * @param tip 提示文字
      */
     public void showToast(String tip){
@@ -215,14 +215,14 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-                        listener.onNegative();
+                        listener.onNegativeClick();
                     }
                 })
                 .setPositiveButton(rightStr, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-                        listener.onPositive();
+                        listener.onPositiveClick();
                     }
                 });
         mAlertDialog.show();

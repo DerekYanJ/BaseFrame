@@ -113,7 +113,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             mProgressDialog.setCancelable(true);
         }
         if (TextUtils.isEmpty(message))
-            mProgressDialog.setMessage(getString(R.string.progress_dialog_str1));
+            mProgressDialog.setMessage(getString(R.string.str_progress_msg_load));
         else
             mProgressDialog.setMessage(message);
         mProgressDialog.show();

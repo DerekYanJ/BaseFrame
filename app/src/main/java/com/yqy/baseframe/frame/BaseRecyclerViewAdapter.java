@@ -38,13 +38,13 @@ public abstract class BaseRecyclerViewAdapter<D,VH extends BaseRecyclerViewAdapt
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(listener != null) listener.onItemClickListener(position);
+                if(listener != null) listener.onItemClick(position);
             }
         });
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if(listener != null) listener.onItemLongClickListener(position);
+                if(listener != null) listener.onItemLongClick(position);
                 return false;
             }
         });

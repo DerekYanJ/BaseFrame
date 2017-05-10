@@ -39,8 +39,6 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     private AlertDialog.Builder mAlertDialog;
     public Unbinder unbinder; //butterKnife 对象
     public Context mContext;
-    public int pageNum = 10; //每页显示条目数量
-    public boolean isLoadMore = true;//是否可以加载更多
 
 
     /** 预备布局contenView id */

@@ -225,14 +225,14 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-                        listener.onNegativeClick();
+                        listener.onNegative();
                     }
                 })
                 .setPositiveButton(rightStr, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-                        listener.onPositiveClick();
+                        listener.onPositive();
                     }
                 });
         mAlertDialog.show();

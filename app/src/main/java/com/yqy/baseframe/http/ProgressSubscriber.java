@@ -1,11 +1,9 @@
 package com.yqy.baseframe.http;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.yqy.baseframe.BuildConfig;
-import com.yqy.baseframe.frame.AbstractActivity;
 import com.yqy.baseframe.utils.JsonUtil;
+import com.yqy.baseframe.utils.L;
 
 import java.util.Map;
 
@@ -44,6 +42,15 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
         mSubscriberResultListener = SubscriberResultListener;
         mContext = context;
         this.requestId = requestId;
+        mProgressDialogHandler = new ProgressDialogHandler(context, this, cancelable, message);
+    }
+
+
+    public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, int requestId, String message,boolean showDialog) {
+        mSubscriberResultListener = SubscriberResultListener;
+        mContext = context;
+        this.requestId = requestId;
+        isShowDialog = showDialog;
         mProgressDialogHandler = new ProgressDialogHandler(context, this, cancelable, message);
     }
 
@@ -108,12 +115,19 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
             dismissProgressDialog();
         if(e.getMessage().indexOf("errorCode") != -1){
             Map<String,String> errorMap = JsonUtil.jsonToMap1(e.getMessage());
-            if (mSubscriberResultListener != null)
+            if(Integer.parseInt(errorMap.get("errorCode")) == 1001){
+                //重新登陆
+//                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+//                ((AbstractActivity) mContext).finish();
+            }else if (mSubscriberResultListener != null)
                 mSubscriberResultListener.onError(Integer.parseInt(errorMap.get("errorCode")),errorMap.get("errorMsg"),requestId);
-            ((AbstractActivity)mContext).showSnackbar(errorMap.get("errorCode") + "：" + errorMap.get("errorMsg"));
-        }else
-            ((AbstractActivity)mContext).showSnackbar(e.getMessage());
-        if(BuildConfig.DEBUG) Log.e("error",e.getMessage());
+        }else {
+            mSubscriberResultListener.onError( -1 ,e.getMessage(),requestId);
+        }
+        if(L.isShow) {
+            e.printStackTrace();
+            L.e("error",e.getMessage());
+        }
     }
 
     /**
@@ -123,8 +137,13 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
      */
     @Override
     public void onNext(T t) {
-        if (mSubscriberResultListener != null)
-            mSubscriberResultListener.onNext(t, requestId);
+        try{
+            if (mSubscriberResultListener != null)
+                mSubscriberResultListener.onNext(t, requestId);
+        }catch (Exception e){
+            if(L.isShow)
+                e.printStackTrace();
+        }
     }
 
     /**

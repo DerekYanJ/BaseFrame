@@ -1,8 +1,8 @@
 package com.yqy.baseframe.http;
 
 
-import com.yqy.baseframe.BuildConfig;
 import com.yqy.baseframe.bean.Result;
+import com.yqy.baseframe.utils.L;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,7 +63,7 @@ public class HttpRequest {
         OkHttpClient.Builder mBuilder = new OkHttpClient().newBuilder();
         mBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS); //超时时间 单位:秒
         //DEBUG 测试环境添加日志拦截器
-        if(BuildConfig.DEBUG){
+        if(L.isShow){
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             mBuilder.addInterceptor(loggingInterceptor);
@@ -118,11 +118,23 @@ public class HttpRequest {
                     errorJson.put("errorMsg",result.msg);
                     throw new ApiException(errorJson.toString());
                 } catch (JSONException e) {
-//                    e.printStackTrace();
-                    throw new ApiException("加载失败");
+                    e.printStackTrace();
+                    throwException("-1","加载失败");
                 }
             }
             return result.data;
+        }
+    }
+
+    private void throwException(String errorCode,String errorMsg){
+        try {
+            JSONObject errorJson = new JSONObject();
+            errorJson.put("errorCode", errorCode);
+            errorJson.put("errorMsg",errorMsg);
+            throw new ApiException(errorJson.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throwException("-1","加载失败");
         }
     }
 

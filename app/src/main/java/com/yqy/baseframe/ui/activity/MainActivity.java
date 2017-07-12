@@ -2,17 +2,11 @@ package com.yqy.baseframe.ui.activity;
 
 import android.content.Intent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.yqy.baseframe.R;
 import com.yqy.baseframe.frame.BaseActivity;
 
-import butterknife.BindView;
-
 public class MainActivity extends BaseActivity {
-    @BindView(R.id.linearlayout)
-    LinearLayout linearlayout;
 
     @Override
     protected int preView() {

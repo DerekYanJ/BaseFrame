@@ -39,6 +39,8 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     private AlertDialog.Builder mAlertDialog;
     public Unbinder unbinder; //butterKnife 对象
     public Context mContext;
+    public int pageNum = 20; //每页显示条目数量
+    public boolean isLoadMore = true;//是否可以加载更多
 
 
     /** 预备布局contenView id */
@@ -92,7 +94,17 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     @Override
     public void onError(int errorCode, String msg,int requestId) {
         //这里可以根据errorCode或者msg做一些全局的处理
-        showToast(msg);
+        if(msg.indexOf("session") != -1 || requestId == 1001){
+            //登录信息超时
+//            Intent intent = new Intent(this,LoginActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            startActivity(intent);
+        }
+        else if(msg.indexOf("http.HttpRequest") != -1) {
+            showToast("请求超时");
+        }else if(msg.indexOf("HTTP 500 Internal Server Error") != -1){
+            showToast("请求异常");
+        }else  showToast(msg);
     }
 
     /**

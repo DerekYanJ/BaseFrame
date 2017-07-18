@@ -15,8 +15,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        setToolBarCenterTitle("我是首页");
-
+//        setToolBarCenterTitle("我是首页");
+        hideToolbar();
     }
 
     @Override

@@ -83,6 +83,10 @@ public abstract class BaseActivity extends AbstractActivity implements View.OnCl
 
     }
 
+    protected void hideToolbar(){
+        getActionBarToolbar().setVisibility(View.GONE);
+    }
+
     public void onCreateCustomToolBar(Toolbar toolbar) {
         toolbar.setContentInsetsRelative(0, 0);
     }

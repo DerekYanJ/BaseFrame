@@ -1,33 +1,29 @@
 package com.yqy.baseframe.frame;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
+
+import com.yqy.baseframe.bean.Result;
+import com.yqy.baseframe.listener.OnRecyclerViewListener;
+
+import java.util.List;
 
 /**
  *
  * Created by yanqy on 2017/3/29.
  */
 
-public class MyRecyclcerView extends RecyclerView.Adapter<MyRecyclcerView.ViewHolder> {
+public class MyRecyclcerView extends BaseRecyclerViewAdapter<Result,MyRecyclcerView.ViewHolder> {
 
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+    public MyRecyclcerView(int layoutResId, List<Result> data, OnRecyclerViewListener listener) {
+        super(layoutResId, data, listener);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    protected void bindData(ViewHolder holder, Result data) {
 
     }
 
-    @Override
-    public int getItemCount() {
-        return 0;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends BaseRecyclerViewAdapter.BaseViewHolder{
 
         public ViewHolder(View itemView) {
             super(itemView);

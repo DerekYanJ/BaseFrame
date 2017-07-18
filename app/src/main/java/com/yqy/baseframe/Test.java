@@ -45,7 +45,12 @@ public class Test extends BaseActivity {
 
     @Override
     protected OnClickBackListener getOnBackClickListener() {
-        return null;
+        return new OnClickBackListener() {
+            @Override
+            public void onClickBack() {
+
+            }
+        };
     }
 
     @Override

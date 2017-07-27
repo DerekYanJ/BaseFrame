@@ -24,6 +24,10 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
     private boolean cancelable = false;//ProgressDialog是否可以关闭
     private boolean isShowDialog = true;//是否显示ProgressDialog
 
+    public int getRequestId() {
+        return requestId;
+    }
+
     public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, int requestId) {
         mSubscriberResultListener = SubscriberResultListener;
         mContext = context;
@@ -151,6 +155,12 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
      */
     @Override
     public void onCancelProgress() {
+        if (!this.isUnsubscribed()) {
+            this.unsubscribe();
+        }
+    }
+
+    public void onCancelRequest(){
         if (!this.isUnsubscribed()) {
             this.unsubscribe();
         }

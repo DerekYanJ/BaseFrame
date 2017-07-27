@@ -20,13 +20,17 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yqy.baseframe.R;
+import com.yqy.baseframe.http.ProgressSubscriber;
 import com.yqy.baseframe.http.SubscriberResultListener;
 import com.yqy.baseframe.listener.OnAlertDialogListener;
 import com.yqy.baseframe.utils.glide.GlideCircleTransform;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.Unbinder;
+import rx.Subscriber;
 
 /**
  * @author derekyan
@@ -42,6 +46,66 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     public int pageNum = 20; //每页显示条目数量
     public boolean isLoadMore = true;//是否可以加载更多
 
+    /** 请求对象的集合 **/
+    private Map<Integer, Subscriber> mSubscriberMap = new HashMap<>();
+
+    /**
+     * 请求集合
+     * @param subscriber
+     */
+    public void addSubscriber(ProgressSubscriber subscriber){
+        try {
+            if(mSubscriberMap == null) return;
+            int requestId = subscriber.getRequestId(); //请求id
+            if(mSubscriberMap.containsKey(requestId)){
+                if(mSubscriberMap.get(requestId).isUnsubscribed())
+                    //如果没有取消订阅 则取消订阅
+                    mSubscriberMap.get(requestId).unsubscribe();
+            }
+            //添加到集合
+            mSubscriberMap.put(requestId,subscriber);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 清空subscriber
+     */
+    public void clearSubscriber(){
+        try {
+            if(mSubscriberMap == null) return;
+            Set<Integer> mSet = mSubscriberMap.keySet();
+            for (int requestId : mSet) {
+                Subscriber subscriber = mSubscriberMap.get(requestId);
+                if( subscriber != null && subscriber.isUnsubscribed()) {
+                    subscriber.unsubscribe(); //取消订阅
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mSubscriberMap.clear(); //清空
+    }
+
+    /**
+     * 请求结束后移除map存的对象
+     * @param requestId
+     */
+    public void removeSubscriber(int requestId){
+        try {
+            if(mSubscriberMap == null) return;
+            if(mSubscriberMap.containsKey(requestId)){
+                Subscriber subscriber = mSubscriberMap.get(requestId);
+                if( subscriber != null && subscriber.isUnsubscribed()) {
+                    subscriber.unsubscribe(); //取消订阅
+                }
+                mSubscriberMap.remove(requestId);//移除
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /** 预备布局contenView id */
     protected abstract int preView();
@@ -83,6 +147,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
 
     @Override
     public void onNext(Object o, int requestId) {
+        removeSubscriber(requestId);
         doData(o,requestId);
     }
 
@@ -93,6 +158,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
      */
     @Override
     public void onError(int errorCode, String msg,int requestId) {
+        removeSubscriber(requestId);
         //这里可以根据errorCode或者msg做一些全局的处理
         if(msg.indexOf("session") != -1 || requestId == 1001){
             //登录信息超时
@@ -281,7 +347,9 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     @Override
     protected void onDestroy() {
         //butterknife取消绑定
-        unbinder.unbind();
+        if(unbinder != null) unbinder.unbind();
+        //清空清空subscriber
+        clearSubscriber();
         super.onDestroy();
     }
 

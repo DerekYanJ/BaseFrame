@@ -160,7 +160,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     public void onError(int errorCode, String msg,int requestId) {
         removeSubscriber(requestId);
         //这里可以根据errorCode或者msg做一些全局的处理
-        if(msg.indexOf("session") != -1 || requestId == 1001){
+        if(msg.indexOf("session") != -1 || errorCode == 1001){
             //登录信息超时
 //            Intent intent = new Intent(this,LoginActivity.class);
 //            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

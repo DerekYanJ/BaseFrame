@@ -1,5 +1,16 @@
 # BaseFrame
-一套基于便于开发的框架(为新项目做准备)
+便于开发
 
-网络层:封装的RxJava + Retrofit2.0<br/>
-Activity基类：有toolbar和没有toolbar
+Step 1. Add the JitPack repository to your build file
+Add it in your root build.gradle at the end of repositories:
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+  
+Step 2. Add the dependency
+  dependencies {
+	        compile 'com.github.DerekYanJ:BaseFrame:1-beta1'
+	}

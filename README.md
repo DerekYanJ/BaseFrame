@@ -4,17 +4,17 @@
 Step 1. Add the JitPack repository to your build file<br/>
 Add it in your root build.gradle at the end of repositories:<br/>
 <p><code>
-	allprojects {<br/>
-		repositories {<br/>
-			...<br/>
-			maven { url 'https://jitpack.io' }<br/>
-		}<br/>
-	}	<br/>
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}	
 </code></p>
   
-Step 2. Add the dependency<br/>
+Step 2. Add the dependency
 <p><code>
-  dependencies {<br/>
-	        compile 'com.github.DerekYanJ:BaseFrame:1-beta1'<br/>
-	}<br/>
+  dependencies {
+	        compile 'com.github.DerekYanJ:BaseFrame:1-beta1'
+	}
 </code></p>

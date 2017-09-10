@@ -1,0 +1,19 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+
+          package="com.yqy.frame"
+    >
+
+    <application android:allowBackup="true"
+                 android:label="@string/app_name"
+                 android:supportsRtl="true"
+    >
+        <!-- Glide 切圆形图片 -->
+        <meta-data
+            android:name="com.yqy.baseframe.utils.glide.GlideModelConfig"
+            android:value="GlideModule"
+            tools:node="remove"/>
+
+    </application>
+
+</manifest>

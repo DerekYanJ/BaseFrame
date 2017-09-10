@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">frame</string>
+    <string name="str_progress_msg_load">加载中...</string>
+    <string name="str_progress_msg_commit">提交中...</string>
+</resources>

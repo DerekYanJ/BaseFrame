@@ -9,9 +9,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.yqy.baseframe.R;
-import com.yqy.baseframe.listener.OnRvRlListener;
-
+import com.yqy.frame.R;
+import com.yqy.frame.listener.OnRvRlListener;
 
 /**
  * 组合控件：recyclerview上下拉刷新和置顶

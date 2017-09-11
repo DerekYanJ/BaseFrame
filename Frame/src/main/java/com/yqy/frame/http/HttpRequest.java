@@ -2,28 +2,21 @@ package com.yqy.frame.http;
 
 
 import com.yqy.frame.bean.Result;
-import com.yqy.frame.utils.L;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Callback;
-import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -40,8 +33,8 @@ import static java.lang.String.valueOf;
 
 public class HttpRequest {
     private long timeout = 5;//超时时间
-    private Retrofit mRetrofit;
-    private HttpService mHttpService;
+    public Retrofit mRetrofit;
+//    private HttpService mHttpService;
 
     private String baseUrl = "没有配置baseUrl";//接口基地址
 
@@ -53,12 +46,20 @@ public class HttpRequest {
         this.baseUrl = baseUrl;
     }
 
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
     /**
      * 超时时间 单位s
      * @param timeout
      */
     public void setTimeout(long timeout) {
         this.timeout = timeout;
+    }
+
+    public long getTimeout() {
+        return timeout;
     }
 
     /**
@@ -78,7 +79,35 @@ public class HttpRequest {
     }
 
     public HttpRequest() {
-        OkHttpClient.Builder mBuilder = new OkHttpClient().newBuilder();
+        /*OkHttpClient.Builder mBuilder = new OkHttpClient().newBuilder();
+        mBuilder.connectTimeout(timeout, TimeUnit.SECONDS); //超时时间 单位:秒
+        //DEBUG 测试环境添加日志拦截器
+        if(L.isShow){
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            mBuilder.addInterceptor(loggingInterceptor);
+        }
+        //添加一个设置header拦截器
+        mBuilder.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                //可以设置和添加请求头数据
+                Request mRequest = chain.request().newBuilder()
+                        .build();
+                return chain.proceed(mRequest);
+            }
+        });
+
+        mRetrofit = new Retrofit.Builder()
+                .client(mBuilder.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .baseUrl(baseUrl) //基地址 可配置到gradle
+                .build();
+        mHttpService = mRetrofit.create(HttpService.class);*/
+    }
+
+    /*public HttpRequest(OkHttpClient.Builder mBuilder){
         mBuilder.connectTimeout(timeout, TimeUnit.SECONDS); //超时时间 单位:秒
         //DEBUG 测试环境添加日志拦截器
         if(L.isShow){
@@ -104,7 +133,7 @@ public class HttpRequest {
                 .baseUrl("baseUrl") //基地址 可配置到gradle
                 .build();
         mHttpService = mRetrofit.create(HttpService.class);
-    }
+    }*/
 
     /**
      * 封装切换线程
@@ -125,7 +154,7 @@ public class HttpRequest {
      *
      * @param <T>
      */
-    private class ResultFunc<T> implements Func1<Result<T>, T> {
+    public class ResultFunc<T> implements Func1<Result<T>, T> {
         @Override
         public T call(Result<T> result) {
             if (result.ret != 200) {
@@ -144,7 +173,7 @@ public class HttpRequest {
         }
     }
 
-    private void throwException(String errorCode,String errorMsg){
+    public void throwException(String errorCode,String errorMsg){
         try {
             JSONObject errorJson = new JSONObject();
             errorJson.put("errorCode", errorCode);
@@ -162,9 +191,9 @@ public class HttpRequest {
      * @param params
      */
 
-    public void getResult(Subscriber<Object> subscriber, Map<String, String> params) {
+    /*public void getResult(Subscriber<Object> subscriber, Map<String, String> params) {
         toSubscribe(mHttpService.getResult(params).map(new ResultFunc<Object>()), subscriber);
-    }
+    }*/
 
     /**
      * 上传文件
@@ -173,7 +202,7 @@ public class HttpRequest {
      * @param mCallback 回调函数
      */
     public void uploadFile(final Map<String, String> params, File file, Callback mCallback) {
-        final String url = "baseUrl";
+        final String url = baseUrl;
         OkHttpClient client = new OkHttpClient();
         // form 表单形式上传
         MultipartBody.Builder requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM);

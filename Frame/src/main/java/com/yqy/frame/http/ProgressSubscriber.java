@@ -110,20 +110,15 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
 
     /**
      * 请求失败，响应错误，数据解析错误等，都会回调该方法
-     *
      * @param e 异常信息
      */
     @Override
     public void onError(Throwable e) {
         if(isShowDialog)
             dismissProgressDialog();
-        if(e.getMessage().indexOf("errorCode") != -1){
+        if(e.getMessage().contains("errorCode")){
             Map<String,String> errorMap = JsonUtil.jsonToMap1(e.getMessage());
-            if(Integer.parseInt(errorMap.get("errorCode")) == 1001){
-                //重新登陆
-//                mContext.startActivity(new Intent(mContext, LoginActivity.class));
-//                ((AbstractActivity) mContext).finish();
-            }else if (mSubscriberResultListener != null)
+            if (mSubscriberResultListener != null)
                 mSubscriberResultListener.onError(Integer.parseInt(errorMap.get("errorCode")),errorMap.get("errorMsg"),requestId);
         }else {
             mSubscriberResultListener.onError( -1 ,e.getMessage(),requestId);

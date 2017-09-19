@@ -10,9 +10,9 @@
 
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <!-- ToolBar -->
-    <style name="ToolBarStyle" parent="ThemeOverlay.AppCompat.ActionBar">
+    <!--<style name="ToolBarStyle" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="actionMenuTextColor">@color/colorPrimary</item>
         <item name="navigationIcon">@drawable/ic_up</item>
-    </style>
+    </style>-->
 
 </resources>

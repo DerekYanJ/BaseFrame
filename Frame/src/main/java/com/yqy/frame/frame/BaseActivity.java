@@ -26,7 +26,6 @@ public abstract class BaseActivity extends AbstractActivity implements View.OnCl
 
     protected Toolbar mToolbar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,23 +44,25 @@ public abstract class BaseActivity extends AbstractActivity implements View.OnCl
      * @param layoutResID
      */
     protected void setContentViewWithActionBar(int layoutResID) {
-
-        ToolBarHelper mToolBarHelper = new ToolBarHelper(this, layoutResID);
-        mToolbar = mToolBarHelper.getToolBar();
-        setContentView(mToolBarHelper.getContentView()); /*把 toolbar 设置到Activity 中*/
-        setSupportActionBar(mToolbar); /*自定义的一些操作*/
-        onCreateCustomToolBar(mToolbar);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnClickBackListener != null) {
-                    mOnClickBackListener.onClickBack();
-                } else {
-                    finish();
+        try {
+            ToolBarHelper mToolBarHelper = new ToolBarHelper(this, layoutResID);
+            mToolbar = mToolBarHelper.getToolBar();
+            setContentView(mToolBarHelper.getContentView()); /*把 toolbar 设置到Activity 中*/
+            setSupportActionBar(mToolbar); /*自定义的一些操作*/
+            onCreateCustomToolBar(mToolbar);
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnClickBackListener != null) {
+                        mOnClickBackListener.onClickBack();
+                    } else {
+                        finish();
+                    }
                 }
-            }
-        });
-
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -80,7 +81,18 @@ public abstract class BaseActivity extends AbstractActivity implements View.OnCl
             }
             ((TextView) view).setText(title);
         }
+    }
 
+    /**
+     * 设置toolbar返回键
+     * @param resId
+     */
+    protected void setToolbarBackIcon(int resId){
+        try {
+            getActionBarToolbar().setNavigationIcon(resId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void hideToolbar(){

@@ -14,6 +14,10 @@ public class L {
     public static boolean isShow = false;
     public static String TAG = "YQY";
 
+    public static void setIsShow(boolean isShow) {
+        L.isShow = isShow;
+    }
+
     /**
      *
      * @param tag

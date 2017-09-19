@@ -3,13 +3,9 @@ package com.yqy.frame;
 import android.view.View;
 
 import com.yqy.frame.frame.BaseActivity;
-import com.yqy.frame.http.HttpRequest;
-import com.yqy.frame.http.ProgressSubscriber;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import rx.Subscriber;
 
 /**
  * @author derekyan
@@ -67,7 +63,7 @@ public class Test extends BaseActivity {
     private void req(){
         Map<String,String> params = new HashMap<>();
         params.put("service","");
-        HttpRequest.getInstance().getResult(new ProgressSubscriber<Object>(this,this,0),params);
+       /* HttpRequest.getInstance().getResult(new ProgressSubscriber<Object>(this,this,0),params);
 
         //不带progress
         HttpRequest.getInstance().getResult(new Subscriber<Object>() {
@@ -85,7 +81,7 @@ public class Test extends BaseActivity {
             public void onNext(Object o) {
 
             }
-        },params);
+        },params);*/
     }
 
     @Override

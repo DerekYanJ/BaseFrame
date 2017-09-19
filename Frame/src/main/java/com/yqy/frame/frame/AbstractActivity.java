@@ -53,9 +53,9 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
      * 请求集合
      * @param subscriber
      */
-    public void addSubscriber(ProgressSubscriber subscriber){
+    public <T> Subscriber<T> addSubscriber(ProgressSubscriber subscriber){
         try {
-            if(mSubscriberMap == null) return;
+            if(mSubscriberMap == null) return subscriber;
             int requestId = subscriber.getRequestId(); //请求id
             if(mSubscriberMap.containsKey(requestId)){
                 if(mSubscriberMap.get(requestId).isUnsubscribed())
@@ -67,6 +67,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return subscriber;
     }
 
     /**
@@ -153,24 +154,29 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
 
     /**
      * 处理错误信息
-     * @param errorCode
-     * @param msg
+     * @param errorCode 错误码
+     * @param msg 错误信息
+     * @param requestId 请求id
      */
     @Override
     public void onError(int errorCode, String msg,int requestId) {
         removeSubscriber(requestId);
+        doError(errorCode,msg,requestId);
+    }
+
+    /**
+     * 处理错误信息  需重写此方法来处理错误信息
+     * @param errorCode 错误码
+     * @param msg 错误信息
+     * @param requestId 请求id
+     */
+    public void doError(int errorCode, String msg,int requestId){
         //这里可以根据errorCode或者msg做一些全局的处理
-        if(msg.indexOf("session") != -1 || errorCode == 1001){
-            //登录信息超时
-//            Intent intent = new Intent(this,LoginActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//            startActivity(intent);
-        }
-        else if(msg.indexOf("http.HttpRequest") != -1) {
+        /*if(msg.indexOf("http.HttpRequest") != -1) {
             showToast("请求超时");
         }else if(msg.indexOf("HTTP 500 Internal Server Error") != -1){
             showToast("请求异常");
-        }else  showToast(msg);
+        }else  showToast(msg);*/
     }
 
     /**

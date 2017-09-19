@@ -34,7 +34,7 @@ import static java.lang.String.valueOf;
 public class HttpRequest {
     private long timeout = 5;//超时时间
     public Retrofit mRetrofit;
-//    private HttpService mHttpService;
+    private HttpService mHttpService;
 
     private String baseUrl = "没有配置baseUrl";//接口基地址
 
@@ -78,8 +78,8 @@ public class HttpRequest {
         return SingletonHolder.INSTANCE;
     }
 
-    public HttpRequest() {
-        /*OkHttpClient.Builder mBuilder = new OkHttpClient().newBuilder();
+    /*public HttpRequest() {
+        OkHttpClient.Builder mBuilder = new OkHttpClient().newBuilder();
         mBuilder.connectTimeout(timeout, TimeUnit.SECONDS); //超时时间 单位:秒
         //DEBUG 测试环境添加日志拦截器
         if(L.isShow){
@@ -103,34 +103,6 @@ public class HttpRequest {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(baseUrl) //基地址 可配置到gradle
-                .build();
-        mHttpService = mRetrofit.create(HttpService.class);*/
-    }
-
-    /*public HttpRequest(OkHttpClient.Builder mBuilder){
-        mBuilder.connectTimeout(timeout, TimeUnit.SECONDS); //超时时间 单位:秒
-        //DEBUG 测试环境添加日志拦截器
-        if(L.isShow){
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            mBuilder.addInterceptor(loggingInterceptor);
-        }
-        //添加一个设置header拦截器
-        mBuilder.addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                //可以设置和添加请求头数据
-                Request mRequest = chain.request().newBuilder()
-                        .build();
-                return chain.proceed(mRequest);
-            }
-        });
-
-        mRetrofit = new Retrofit.Builder()
-                .client(mBuilder.build())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl("baseUrl") //基地址 可配置到gradle
                 .build();
         mHttpService = mRetrofit.create(HttpService.class);
     }*/

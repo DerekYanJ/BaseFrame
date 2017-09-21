@@ -17,7 +17,7 @@ import java.util.List;
 
 public abstract class BaseRecyclerViewAdapter<D,VH extends BaseViewHolder> extends RecyclerView.Adapter<VH>{
 
-    private int layoutResId; //item资源Id
+    public int layoutResId; //item资源Id
     private List<D> data; //数据集合
     private OnRecyclerViewListener listener;
     public View view;

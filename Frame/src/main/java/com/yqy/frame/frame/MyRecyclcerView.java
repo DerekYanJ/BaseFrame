@@ -13,13 +13,12 @@ import java.util.List;
  */
 
 public class MyRecyclcerView extends BaseRecyclerViewAdapter<Result,MyRecyclcerView.ViewHolder> {
-
     public MyRecyclcerView(int layoutResId, List<Result> data, OnRecyclerViewListener listener) {
         super(layoutResId, data, listener);
     }
 
     @Override
-    protected void bindData(ViewHolder holder, Result data) {
+    protected void bindData(ViewHolder holder, Result data, int position) {
 
     }
 

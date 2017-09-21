@@ -43,7 +43,7 @@ public abstract class BaseRecyclerViewAdapter<D,VH extends BaseViewHolder> exten
 
     @Override
     public void onBindViewHolder(VH holder, final int position) {
-        bindData(holder,data.get(position));
+        bindData(holder,data.get(position),position);
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,5 +69,5 @@ public abstract class BaseRecyclerViewAdapter<D,VH extends BaseViewHolder> exten
      * @param  holder
      * @param data
      */
-    protected abstract void bindData(VH holder,D data);
+    protected abstract void bindData(VH holder,D data,int position);
 }

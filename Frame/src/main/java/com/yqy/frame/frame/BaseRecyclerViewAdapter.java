@@ -20,8 +20,16 @@ public abstract class BaseRecyclerViewAdapter<D,VH extends BaseViewHolder> exten
     private int layoutResId; //item资源Id
     private List<D> data; //数据集合
     private OnRecyclerViewListener listener;
+    public View view;
 
     public BaseRecyclerViewAdapter(int layoutResId, List<D> data, OnRecyclerViewListener listener) {
+        this.data = data == null? new ArrayList<D>():data;
+        this.listener = listener;
+        if(layoutResId != 0) this.layoutResId = layoutResId;
+        else throw new NullPointerException("请设置Item资源Id");
+    }
+
+    public BaseRecyclerViewAdapter(int layoutResId, List<D> data) {
         this.data = data == null? new ArrayList<D>():data;
         if(layoutResId != 0) this.layoutResId = layoutResId;
         else throw new NullPointerException("请设置Item资源Id");
@@ -29,7 +37,8 @@ public abstract class BaseRecyclerViewAdapter<D,VH extends BaseViewHolder> exten
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        return (VH) new BaseViewHolder(LayoutInflater.from(parent.getContext()).inflate(layoutResId,parent,false));
+        view = LayoutInflater.from(parent.getContext()).inflate(layoutResId, parent, false);
+        return (VH) new BaseViewHolder(view);
     }
 
     @Override

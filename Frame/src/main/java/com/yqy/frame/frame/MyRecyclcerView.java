@@ -23,7 +23,7 @@ public class MyRecyclcerView extends BaseRecyclerViewAdapter<Result,MyRecyclcerV
 
     }
 
-    public class ViewHolder extends BaseRecyclerViewAdapter.BaseViewHolder{
+    public class ViewHolder extends BaseViewHolder{
 
         public ViewHolder(View itemView) {
             super(itemView);

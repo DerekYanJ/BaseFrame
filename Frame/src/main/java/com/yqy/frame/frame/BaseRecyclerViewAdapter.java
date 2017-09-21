@@ -15,7 +15,7 @@ import java.util.List;
  * Created by yanqy on 2017/3/29.
  */
 
-public abstract class BaseRecyclerViewAdapter<D,VH extends BaseRecyclerViewAdapter.BaseViewHolder> extends RecyclerView.Adapter<VH>{
+public abstract class BaseRecyclerViewAdapter<D,VH extends BaseViewHolder> extends RecyclerView.Adapter<VH>{
 
     private int layoutResId; //item资源Id
     private List<D> data; //数据集合
@@ -61,12 +61,4 @@ public abstract class BaseRecyclerViewAdapter<D,VH extends BaseRecyclerViewAdapt
      * @param data
      */
     protected abstract void bindData(VH holder,D data);
-
-    public class BaseViewHolder extends RecyclerView.ViewHolder{
-        public View view;
-        public BaseViewHolder(View itemView) {
-            super(itemView);
-            view = itemView;
-        }
-    }
 }

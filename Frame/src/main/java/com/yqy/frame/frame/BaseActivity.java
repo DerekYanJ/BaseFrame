@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.yqy.frame.R;
 import com.yqy.frame.utils.ToolBarHelper;
 
-import butterknife.ButterKnife;
-
 /**
  * @author derekyan
  * @desc 有状态栏
@@ -31,7 +29,7 @@ public abstract class BaseActivity extends AbstractActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentViewWithActionBar(preView());
         mContext = this;
-        unbinder = ButterKnife.bind(this);
+//        unbinder = ButterKnife.bind(this);
         initView();
         addListener();
         initData();
@@ -110,5 +108,10 @@ public abstract class BaseActivity extends AbstractActivity implements View.OnCl
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected OnClickBackListener getOnBackClickListener() {
+        return null;
     }
 }

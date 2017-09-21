@@ -1,7 +1,5 @@
 package com.yqy.testframe;
 
-import com.yqy.frame.bean.Result;
-
 import java.util.Map;
 
 import retrofit2.http.FieldMap;
@@ -23,6 +21,6 @@ public interface HttpService {
      */
     @FormUrlEncoded
     @POST("url/")
-    Observable<Result<Login>> getLogin(@FieldMap Map<String, String> params);
+    Observable<MResult<Login>> getLogin(@FieldMap Map<String, String> params);
 
 }

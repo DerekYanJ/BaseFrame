@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.Unbinder;
 import rx.Subscriber;
 
 /**
@@ -41,7 +40,7 @@ import rx.Subscriber;
 public abstract class AbstractActivity extends AppCompatActivity implements View.OnClickListener,SubscriberResultListener {
     private ProgressDialog mProgressDialog;
     private AlertDialog.Builder mAlertDialog;
-    public Unbinder unbinder; //butterKnife 对象
+//    public Unbinder unbinder; //butterKnife 对象
     public Context mContext;
     public int pageNum = 20; //每页显示条目数量
     public boolean isLoadMore = true;//是否可以加载更多
@@ -353,7 +352,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     @Override
     protected void onDestroy() {
         //butterknife取消绑定
-        if(unbinder != null) unbinder.unbind();
+//        if(unbinder != null) unbinder.unbind();
         //清空清空subscriber
         clearSubscriber();
         super.onDestroy();

@@ -1,47 +1,71 @@
 package com.yqy.testframe;
 
+import com.yqy.frame.http.ApiException;
 import com.yqy.frame.utils.L;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Subscriber;
+import rx.functions.Func1;
 
 /**
  * Created by DerekYan on 2017/9/19.
  */
 
-public class HttpRequest extends com.yqy.frame.http.HttpRequest {
+class HttpRequest extends com.yqy.frame.http.HttpRequest {
     private HttpService mHttpService;
 
-    public void getLogin(Subscriber<Login> subscriber, Map<String, String> params) {
-        toSubscribe(mHttpService.getLogin(params).map(new ResultFunc<Login>()), subscriber);
+    void getLogin(Subscriber<Login> subscriber, Map<String, String> params) {
+        toSubscribe(mHttpService.getLogin(getSpecialParams(params)).map(new MResultFunc<Login>()), subscriber);
     }
 
     /**
-     * 打印请求链接
-     * @param params 请求参数
+     * 将请求参数做特殊处理 比如添加公共请求参数
+     * @param params 参数
+     * @return 处理后的参数
      */
-    public void printRequestUrl(Map<String, String> params){
-        /**    打印个地址   **/
-        StringBuffer sb = new StringBuffer(getBaseUrl());
-        Set<String> set =  params.keySet();
-        for(String str:set){
-            sb.append(str + "=" + params.get(str) + "&");
+    private Map<String, String> getSpecialParams(Map<String, String> params){
+        if(L.isShow) printRequestUrl(params);
+        return params;
+    }
+
+    private class MResultFunc<T> implements Func1<MResult<T>, T> {
+
+        @Override
+        public T call(MResult<T> tResult) {
+            //status 视情况而定 与后台规定好的请求成功的字段
+            //此例 status == 0 时为请求成功
+            if (tResult.status != 0) {
+                //主动抛异常  会自动进去OnError方法
+                try {
+                    JSONObject errorJson = new JSONObject();
+                    errorJson.put("errorCode",tResult.status+"");
+                    errorJson.put("errorMsg",tResult.desc);
+                    throw new ApiException(errorJson.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    throwException("-1","加载失败");
+                }
+            }
+            return tResult.data;
         }
-        sb = sb.deleteCharAt(sb.length()-1);
-        L.e("okhttpParams",params.toString());
-        L.e("okhttpRequestUrl",sb.toString());
     }
 
     /**
@@ -82,11 +106,27 @@ public class HttpRequest extends com.yqy.frame.http.HttpRequest {
         });
         mRetrofit = new Retrofit.Builder()
                 .client(mBuilder.build())
+                .addConverterFactory(new NullOnEmptyConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(getBaseUrl()) //基地址 可配置到gradle
                 .build();
         mHttpService = mRetrofit.create(HttpService.class);
+    }
+
+    private class NullOnEmptyConverterFactory extends Converter.Factory {
+
+        @Override
+        public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
+            final Converter<ResponseBody, ?> delegate = retrofit.nextResponseBodyConverter(this, type, annotations);
+            return new Converter<ResponseBody,Object>() {
+                @Override
+                public Object convert(ResponseBody body) throws IOException {
+                    if (body.contentLength() == 0) return null;
+                    return delegate.convert(body);
+                }
+            };
+        }
     }
 
 }

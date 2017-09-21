@@ -1,13 +1,14 @@
 package com.yqy.frame.http;
 
 
-import com.yqy.frame.bean.Result;
+import com.yqy.frame.utils.L;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Callback;
@@ -20,7 +21,6 @@ import retrofit2.Retrofit;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import static java.lang.String.valueOf;
@@ -33,7 +33,7 @@ import static java.lang.String.valueOf;
 
 public class HttpRequest {
     private long timeout = 5;//超时时间
-    public Retrofit mRetrofit;
+    protected Retrofit mRetrofit;
     private HttpService mHttpService;
 
     private String baseUrl = "没有配置baseUrl";//接口基地址
@@ -42,11 +42,11 @@ public class HttpRequest {
      * 接口基地址
      * @param baseUrl
      */
-    public void setBaseUrl(String baseUrl) {
+    protected void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 
-    public String getBaseUrl() {
+    protected String getBaseUrl() {
         return baseUrl;
     }
 
@@ -58,7 +58,7 @@ public class HttpRequest {
         this.timeout = timeout;
     }
 
-    public long getTimeout() {
+    protected long getTimeout() {
         return timeout;
     }
 
@@ -114,7 +114,7 @@ public class HttpRequest {
      * @param s
      * @param <T>
      */
-    public <T> void toSubscribe(Observable<T> o, Subscriber<T> s) {
+    protected  <T> void toSubscribe(Observable<T> o, Subscriber<T> s) {
         o.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -124,9 +124,9 @@ public class HttpRequest {
     /**
      * 请求数据统一进行预处理
      *
-     * @param <T>
+//     * @param <T>
      */
-    public class ResultFunc<T> implements Func1<Result<T>, T> {
+   /* private class ResultFunc<T> implements Func1<Result<T>, T> {
         @Override
         public T call(Result<T> result) {
             if (result.ret != 200) {
@@ -143,9 +143,9 @@ public class HttpRequest {
             }
             return result.data;
         }
-    }
+    }*/
 
-    public void throwException(String errorCode,String errorMsg){
+    protected void throwException(String errorCode, String errorMsg){
         try {
             JSONObject errorJson = new JSONObject();
             errorJson.put("errorCode", errorCode);
@@ -155,6 +155,22 @@ public class HttpRequest {
             e.printStackTrace();
             throwException("-1","加载失败");
         }
+    }
+
+    /**
+     * 打印请求链接
+     * @param params 请求参数
+     */
+    protected void printRequestUrl(Map<String, String> params){
+        /**    打印个地址   **/
+        StringBuffer sb = new StringBuffer(getBaseUrl());
+        Set<String> set =  params.keySet();
+        for(String str:set){
+            sb.append(str + "=" + params.get(str) + "&");
+        }
+        sb = sb.deleteCharAt(sb.length()-1);
+        L.e("requestParams",params.toString());
+        L.e("requestUrl",sb.toString());
     }
 
     /**

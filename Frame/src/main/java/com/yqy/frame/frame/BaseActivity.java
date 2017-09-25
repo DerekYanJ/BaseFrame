@@ -24,10 +24,27 @@ public abstract class BaseActivity extends AbstractActivity implements View.OnCl
 
     protected Toolbar mToolbar;
 
+    private boolean isShowToolbar = true;
+
+    public boolean isShowToolbar() {
+        return isShowToolbar;
+    }
+
+    /**
+     * 设置是否展示Toolbar
+     * @param showToolbar
+     */
+    public void setShowToolbar(boolean showToolbar) {
+        isShowToolbar = showToolbar;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentViewWithActionBar(preView());
+        if(isShowToolbar)
+            setContentViewWithActionBar(preView());
+        else
+            setContentView(preView());
         mContext = this;
 //        unbinder = ButterKnife.bind(this);
         initView();

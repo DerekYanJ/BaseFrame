@@ -24,24 +24,17 @@ public abstract class BaseActivity extends AbstractActivity implements View.OnCl
 
     protected Toolbar mToolbar;
 
-    private boolean isShowToolbar = true;
-
-    public boolean isShowToolbar() {
-        return isShowToolbar;
-    }
-
     /**
-     * 设置是否展示Toolbar
-     * @param showToolbar
+     * 设置是否展示Toolbar 默认为显示
      */
-    public void setShowToolbar(boolean showToolbar) {
-        isShowToolbar = showToolbar;
+    public boolean setIsShowToolbar(){
+        return true;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(isShowToolbar)
+        if(setIsShowToolbar())
             setContentViewWithActionBar(preView());
         else
             setContentView(preView());
@@ -85,6 +78,7 @@ public abstract class BaseActivity extends AbstractActivity implements View.OnCl
      * @param title
      */
     protected void setToolBarCenterTitle(String title) {
+        if(!setIsShowToolbar()) return;
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle("");

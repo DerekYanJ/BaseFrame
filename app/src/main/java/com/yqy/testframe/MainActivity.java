@@ -10,6 +10,11 @@ import java.util.Map;
 public class MainActivity extends MBaseActivity {
 
     @Override
+    public boolean setIsShowToolbar() {
+        return false;
+    }
+
+    @Override
     protected int preView() {
         return R.layout.activity_main;
     }

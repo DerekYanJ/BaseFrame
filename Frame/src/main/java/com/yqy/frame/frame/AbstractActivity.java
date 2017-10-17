@@ -45,6 +45,16 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     public int pageNum = 20; //每页显示条目数量
     public boolean isLoadMore = true;//是否可以加载更多
 
+    private int loadImgResId = R.mipmap.img_default_load; //Glide 加载图片
+
+    /**
+     * 设置默认加载图片id
+     * @param loadImgResId
+     */
+    public void setLoadImgResId(int loadImgResId) {
+        this.loadImgResId = loadImgResId;
+    }
+
     /** 请求对象的集合 **/
     private Map<Integer, Subscriber> mSubscriberMap = new HashMap<>();
 
@@ -243,8 +253,8 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
      */
     public void loadCircleImg(String url, ImageView mImageView){
         Glide.with(this).load(url)
-                .placeholder(R.mipmap.ic_launcher) //加载前图片
-                .error(R.mipmap.ic_launcher)  //加载失败图片
+                .placeholder(R.mipmap.img_default_load) //加载前图片
+                .error(R.mipmap.img_default_load)  //加载失败图片
                 .transform(new GlideCircleTransform(this))  //切圆形
                 .diskCacheStrategy(DiskCacheStrategy.ALL)  //缓存 全尺寸和适应缓存
                 .into(mImageView);  //要显示的控件
@@ -257,8 +267,8 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
      */
     public void loadImg(String url, ImageView mImageView){
         Glide.with(this).load(url)
-                .placeholder(R.mipmap.ic_launcher) //加载前图片
-                .error(R.mipmap.ic_launcher)  //加载失败图片
+                .placeholder(R.mipmap.img_default_load) //加载前图片
+                .error(R.mipmap.img_default_load)  //加载失败图片
                 .diskCacheStrategy(DiskCacheStrategy.ALL)  //缓存 全尺寸和适应缓存
                 .into(mImageView);  //要显示的控件
     }

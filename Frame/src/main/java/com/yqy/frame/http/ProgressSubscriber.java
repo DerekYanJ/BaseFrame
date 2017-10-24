@@ -19,30 +19,30 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
     private SubscriberResultListener mSubscriberResultListener;
     private ProgressDialogHandler mProgressDialogHandler;
     private Context mContext;
-    private int requestId; //请求ID 用于识别接口
+    private String requestId; //请求ID 用于识别接口
 
     private boolean cancelable = false;//ProgressDialog是否可以关闭
     private boolean isShowDialog = true;//是否显示ProgressDialog
 
-    public int getRequestId() {
+    public String getRequestId() {
         return requestId;
     }
 
-    public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, int requestId) {
+    public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, String requestId) {
         mSubscriberResultListener = SubscriberResultListener;
         mContext = context;
         this.requestId = requestId;
         mProgressDialogHandler = new ProgressDialogHandler(context, this, cancelable);
     }
 
-    public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, int requestId, boolean flag) {
+    public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, String requestId, boolean flag) {
         mSubscriberResultListener = SubscriberResultListener;
         mContext = context;
         this.requestId = requestId;
         mProgressDialogHandler = new ProgressDialogHandler(context, this, flag);
     }
 
-    public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, int requestId, String message) {
+    public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, String requestId, String message) {
         mSubscriberResultListener = SubscriberResultListener;
         mContext = context;
         this.requestId = requestId;
@@ -50,7 +50,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
     }
 
 
-    public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, int requestId, String message,boolean showDialog) {
+    public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, String requestId, String message,boolean showDialog) {
         mSubscriberResultListener = SubscriberResultListener;
         mContext = context;
         this.requestId = requestId;
@@ -65,7 +65,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
      * @param flag                     是否允许关闭progressDialog
      * @param message                  progressDialog中message内容
      */
-    public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, int requestId, boolean flag, String message) {
+    public ProgressSubscriber(SubscriberResultListener SubscriberResultListener, Context context, String requestId, boolean flag, String message) {
         mSubscriberResultListener = SubscriberResultListener;
         mContext = context;
         this.requestId = requestId;

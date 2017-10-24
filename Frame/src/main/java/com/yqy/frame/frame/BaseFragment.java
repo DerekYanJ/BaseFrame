@@ -42,7 +42,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public Context mContext;
 
     /** 请求对象的集合 **/
-    private Map<Integer, Subscriber> mSubscriberMap = new HashMap<>();
+    private Map<String, Subscriber> mSubscriberMap = new HashMap<>();
 
     /**
      * 请求集合
@@ -51,7 +51,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public void addSubscriber(ProgressSubscriber subscriber){
         try {
             if(mSubscriberMap == null) return;
-            int requestId = subscriber.getRequestId(); //请求id
+            String requestId = subscriber.getRequestId(); //请求id
             if(mSubscriberMap.containsKey(requestId)){
                 if(mSubscriberMap.get(requestId).isUnsubscribed())
                     //如果没有取消订阅 则取消订阅
@@ -70,8 +70,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public void clearSubscriber(){
         try {
             if(mSubscriberMap == null) return;
-            Set<Integer> mSet = mSubscriberMap.keySet();
-            for (int requestId : mSet) {
+            Set<String> mSet = mSubscriberMap.keySet();
+            for (String requestId : mSet) {
                 Subscriber subscriber = mSubscriberMap.get(requestId);
                 if( subscriber != null && subscriber.isUnsubscribed()) {
                     subscriber.unsubscribe(); //取消订阅
@@ -87,7 +87,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
      * 请求结束后移除map存的对象
      * @param requestId
      */
-    public void removeSubscriber(int requestId){
+    public void removeSubscriber(String requestId){
         try {
             if(mSubscriberMap == null) return;
             if(mSubscriberMap.containsKey(requestId)){
@@ -153,11 +153,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         });
     }
 
-    public <T> void doData(T data, int id){}
-    public <T> void doData(T data, int id, String qid){}
+    public <T> void doData(T data, String id){}
+    public <T> void doData(T data, String id, String qid){}
 
     @Override
-    public void onNext(Object o, int requestId) {
+    public void onNext(Object o, String requestId) {
         removeSubscriber(requestId);
         doData(o,requestId);
     }
@@ -168,7 +168,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
      * @param msg
      */
     @Override
-    public void onError(int errorCode, String msg,int requestId) {
+    public void onError(int errorCode, String msg,String requestId) {
         removeSubscriber(requestId);
         if(getActivity() != null)
             ((AbstractActivity)getActivity()).onError(errorCode,msg,requestId);

@@ -56,7 +56,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     }
 
     /** 请求对象的集合 **/
-    private Map<Integer, Subscriber> mSubscriberMap = new HashMap<>();
+    private Map<String, Subscriber> mSubscriberMap = new HashMap<>();
 
     /**
      * 请求集合
@@ -65,7 +65,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     public <T> Subscriber<T> addSubscriber(ProgressSubscriber subscriber){
         try {
             if(mSubscriberMap == null) return subscriber;
-            int requestId = subscriber.getRequestId(); //请求id
+            String requestId = subscriber.getRequestId(); //请求id
             if(mSubscriberMap.containsKey(requestId)){
                 if(mSubscriberMap.get(requestId).isUnsubscribed())
                     //如果没有取消订阅 则取消订阅
@@ -85,8 +85,8 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
     public void clearSubscriber(){
         try {
             if(mSubscriberMap == null) return;
-            Set<Integer> mSet = mSubscriberMap.keySet();
-            for (int requestId : mSet) {
+            Set<String> mSet = mSubscriberMap.keySet();
+            for (String requestId : mSet) {
                 Subscriber subscriber = mSubscriberMap.get(requestId);
                 if( subscriber != null && subscriber.isUnsubscribed()) {
                     subscriber.unsubscribe(); //取消订阅
@@ -102,7 +102,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
      * 请求结束后移除map存的对象
      * @param requestId
      */
-    public void removeSubscriber(int requestId){
+    public void removeSubscriber(String requestId){
         try {
             if(mSubscriberMap == null) return;
             if(mSubscriberMap.containsKey(requestId)){
@@ -152,11 +152,11 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
      * @param id
      * @param <T>
      */
-    public <T> void doData(T data, int id){}
-    public <T> void doData(T data, int id, String qid){}
+    public <T> void doData(T data, String id){}
+    public <T> void doData(T data, String id, String qid){}
 
     @Override
-    public void onNext(Object o, int requestId) {
+    public void onNext(Object o, String requestId) {
         removeSubscriber(requestId);
         doData(o,requestId);
     }
@@ -168,7 +168,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
      * @param requestId 请求id
      */
     @Override
-    public void onError(int errorCode, String msg,int requestId) {
+    public void onError(int errorCode, String msg,String requestId) {
         removeSubscriber(requestId);
         doError(errorCode,msg,requestId);
     }
@@ -179,7 +179,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements View
      * @param msg 错误信息
      * @param requestId 请求id
      */
-    public void doError(int errorCode, String msg,int requestId){
+    public void doError(int errorCode, String msg,String requestId){
         //这里可以根据errorCode或者msg做一些全局的处理
         /*if(msg.indexOf("http.HttpRequest") != -1) {
             showToast("请求超时");

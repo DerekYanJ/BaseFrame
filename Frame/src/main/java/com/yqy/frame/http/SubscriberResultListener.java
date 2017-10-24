@@ -12,12 +12,12 @@ public interface SubscriberResultListener<T> {
      * @param t  结果类型 Result->data
      * @param requestId 请求标识
      */
-    void onNext(T t, int requestId);
+    void onNext(T t, String requestId);
 
     /**
      *
      * @param errorCode
      * @param msg
      */
-    void onError(int errorCode, String msg, int requestId);
+    void onError(int errorCode, String msg, String requestId);
 }

@@ -85,13 +85,13 @@ public class Test extends BaseActivity {
     }
 
     @Override
-    public <T> void doData(T data, int id) {
+    public <T> void doData(T data, String id) {
         super.doData(data, id);
         //TODO 在这里处理数据
     }
 
     @Override
-    public <T> void doData(T data, int id, String qid) {
+    public <T> void doData(T data, String id, String qid) {
         super.doData(data, id, qid);
         //TODO 或者在这里 视情况
     }

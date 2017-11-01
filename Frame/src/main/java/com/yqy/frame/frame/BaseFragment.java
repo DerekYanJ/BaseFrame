@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import rx.Subscriber;
 
 /**
@@ -38,7 +36,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public View view;
     private ProgressDialog mProgressDialog;
     private AlertDialog.Builder mAlertDialog;
-    public Unbinder unbinder; //butterknife 对象
     public Context mContext;
 
     /** 请求对象的集合 **/
@@ -112,7 +109,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        unbinder = ButterKnife.bind(this, view);
         mContext = this.getActivity();
         initView();
         addListener();
@@ -274,8 +270,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onDestroy() {
-        //取消订阅
-        if(unbinder != null) unbinder.unbind();
         //清空清空subscriber
         clearSubscriber();
         super.onDestroy();

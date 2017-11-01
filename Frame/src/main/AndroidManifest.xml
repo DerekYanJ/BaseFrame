@@ -3,10 +3,7 @@
           package="com.yqy.frame"
     >
 
-    <application android:allowBackup="true"
-                 android:label="@string/app_name"
-                 android:supportsRtl="true"
-    >
+    <application>
         <!-- Glide 切圆形图片 -->
         <meta-data
             android:name="com.yqy.baseframe.utils.glide.GlideModelConfig"
